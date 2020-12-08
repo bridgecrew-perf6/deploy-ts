@@ -88,7 +88,7 @@ ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
 # CMD ["serve"]
 
 COPY index_to_name.json my_handler.py MyHandler.py /home/model-server/
-COPY vacuum.mar /home/model-server/model-store
+COPY vacuums.mar /home/model-server/model-store
 
 CMD ["torchserve", \
      "--start", \
@@ -96,4 +96,4 @@ CMD ["torchserve", \
     #  "--ts-config=/home/model-server/config.properties", \
      "--model-store=/home/model-server/model-store", \
      "--models", \
-     "vacuum=vacuum.mar"]
+     "vacuum=vacuums.mar"]

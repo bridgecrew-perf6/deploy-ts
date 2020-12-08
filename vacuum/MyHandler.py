@@ -6,6 +6,9 @@ from PIL import Image
 from torchvision import transforms
 from ts.torch_handler.base_handler import BaseHandler
 
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+#is_gpu = torch.cuda.is_available()
+
 class MyHandler(BaseHandler):
     """
     Custom handler for pytorch serve. This handler supports batch requests.
@@ -34,6 +37,10 @@ class MyHandler(BaseHandler):
         image = self.transform(image)
         # add batch dim
         image = image.unsqueeze(0)
+
+	#if is_gpu:
+        image = image.to(device)
+
         return image
 
     def preprocess(self, requests):
@@ -41,7 +48,7 @@ class MyHandler(BaseHandler):
         Process all the images from the requests and batch them in a Tensor.
         """
         images = [self.preprocess_one_image(req) for req in requests]
-        images = torch.cat(images)    
+        images = torch.cat(images)
         return images
 
     def inference(self, x):
